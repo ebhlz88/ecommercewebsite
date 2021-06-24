@@ -1,18 +1,14 @@
 <template>
   <div id="app">
     <Navbar class="navbar"></Navbar>
-    <banner />
     <router-view />
   </div>
 </template>
 
 <script>
-import banner from "./components/banner.vue";
 export default {
   name: "App",
-  components: {
-    banner,
-  },
+  components: {},
 };
 </script>
 
@@ -24,5 +20,4 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
 </style>

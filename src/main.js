@@ -10,12 +10,13 @@ Vue.component("Navbar", require("./components/Navbar.vue").default);
 Vue.config.productionTip = false;
 
 import services from "./components/services.vue";
-
+import banner from "./components/banner.vue";
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
-import home from "./components/home.vue";
-const routes = [{ path: "/home", component: home },
-{path:"/cardview",component:services}];
+const routes = [
+  { path: "/", component: banner },
+  { path: "/cardview", component: services },
+];
 
 const router = new VueRouter({
   routes,
