@@ -2,9 +2,9 @@
   <div>
     <nav id="nav" class="navbar navbar-expand-lg navbar-light nav">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#"
+        <router-link class="navbar-brand" to="/"
           ><img src="../assets/demo-logo.png" alt="logo"
-        /></a>
+        /></router-link>
         <button
           class="navbar-toggler"
           type="button"

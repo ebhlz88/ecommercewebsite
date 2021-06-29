@@ -1,69 +1,75 @@
 <template>
-  <div id="services" class="container">
-    <div class="row rowmargin">
-      <div class="col-md-4">
-        <img src="../assets/service1.png" class="service-image" alt="service" />
-        <h3>This is service One</h3>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur ea
-          iure consequatur eos nemo architecto neque recusandae, officia
-          mollitia obcaecati nisi nobis ad dolore reiciendis. Eveniet non qui
-          saepe eaque?
-        </p>
+  <div id="services">
+    <div class="top-div service-div"></div>
+    <div v-for="cards in productlist" :key="cards.id" class="disp">
+      <div class="card container" v-on:click="cardclick" style="width: 18rem">
+        <img
+          class="card-img-top"
+          :src="cards.product_photo"
+          alt="Card image cap"
+        />
+
+        <div class="card-body">
+          <h5 class="card-title">{{ cards.productname }}</h5>
+          <p class="card-text">{{ cards.productdisc }}</p>
+        </div>
       </div>
-      <div class="col-md-4">
-        <img src="../assets/service1.png" class="service-image" alt="service" />
-        <h3>This is service Two</h3>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur ea
-          iure consequatur eos nemo architecto neque recusandae, officia
-          mollitia obcaecati nisi nobis ad dolore reiciendis. Eveniet non qui
-          saepe eaque?
-        </p>
-      </div>
-      <div class="col-md-4">
-        <img src="../assets/service1.png" class="service-image" alt="service" />
-        <h3>This is service Three</h3>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur ea
-          iure consequatur eos nemo architecto neque recusandae, officia
-          mollitia obcaecati nisi nobis ad dolore reiciendis. Eveniet non qui
-          saepe eaque?
-        </p>
-      </div>
-      <button class="btn btn-primary" type="button">Click</button>
-    </div>
-    <div class="row margintop">
-      <div class="col-md-4 userdetail">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, iste
-          explicabo vel veniam beatae amet
-        </p>
-        <img src="../assets/user1.jpg" class="image" alt="user" />
-        <p><b>Emad baloch</b><br />Web Developer</p>
-      </div>
-      <div class="col-md-4 userdetail">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, iste
-          explicabo vel veniam beatae amet
-        </p>
-        <img src="../assets/user1.jpg" class="image" alt="user" />
-        <p><b>Emad baloch</b><br />Web Developer</p>
-      </div>
-      <div class="col-md-4 userdetail">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, iste
-          explicabo vel veniam beatae amet
-        </p>
-        <img src="../assets/user1.jpg" class="image" alt="user" />
-        <p><b>Emad baloch</b><br />Web Developer</p>
-      </div>
+      <!-- <input type="file" @change="onFileChanged" />
+      <button @click="onUpload">Upload!</button> -->
     </div>
   </div>
 </template>
-
 <script>
-export default {};
+import Vue from "vue";
+import VueAxios from "vue-axios";
+import axios from "axios";
+
+Vue.use(VueAxios, axios);
+export default {
+  data() {
+    return {
+      productlist: undefined,
+      imagesource: null,
+      imagefile: null,
+    };
+  },
+  methods: {
+    cardclick() {
+      console.log("clicked");
+    },
+    fetch() {
+      Vue.axios.get("http://127.0.0.1:8000/products/").then((resp) => {
+        this.productlist = resp.data;
+        console.log(resp.data[0]);
+      });
+    },
+    onFileChanged(e) {
+      let image = e.target.files[0];
+      this.imagefile = e.target.files[0];
+      let reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = (e) => {
+        this.imagesource = e.target.result;
+        console.log(e);
+      };
+    },
+    onUpload() {
+      let data = new FormData();
+      data.append("productname", "my-picture");
+      data.append("productdisc", "event.target.files[0]");
+      data.append("product_photo", this.imagefile);
+      console.log(data);
+      // let data = {productname: "produc",productdisc: "this discriptions",product_photo: this.image}
+      axios.post("http://127.0.0.1:8000/products/", data).then((resp) => {
+        console.log("success" + resp.data);
+      });
+      this.imagefile = data;
+    },
+  },
+  created() {
+    this.fetch();
+  },
+};
 </script>
 
 <style>
@@ -93,12 +99,29 @@ export default {};
   width: 60px;
   height: 60px;
 }
-.margintop {
-  margin-top: 90px;
+.top-div {
+  background-image: linear-gradient(
+    to right,
+    rgb(162, 39, 211),
+    rgb(102, 0, 150)
+  );
+  padding-top: 200px;
+  width: 100%;
 }
-#services {
-  border: solid;
-  border-radius: 3rem;
-  padding: 3rem 1rem;
+.rowmargin {
+  padding-bottom: 50px;
+  margin: 2rem;
+}
+.disp {
+  display: inline-block;
+}
+.card {
+  min-height: 250px;
+}
+.card-img-top {
+  height: 200px;
+}
+.disp:hover {
+  cursor: pointer;
 }
 </style>
